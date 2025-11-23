@@ -1,0 +1,7 @@
+{
+  "httpMethod": "GET",
+  "path": "/items",
+  "headers": {
+    "x-tenant-id": "demo-tenant"
+  }
+}
