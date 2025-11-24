@@ -64,6 +64,15 @@ AurumGuard is built as a fully serverless application on **AWS**. Each service h
 - **For companies** – Reduce losses and shrinkage, gain real-time visibility into expensive stock, and simplify audits with a clear record of every high-value item.  
 - **For individuals** – Track expensive jewelry and other valuable assets in one place, provide proof of ownership for insurance and claims, and keep photos + details together in a secure, cloud-based system.
 
+---
 
+## Project Links
+Hawi Jordan – AWS Cloud Engineer
+- **GitHub repository:**  
+  https://github.com/HawiK285/AURUMGUARD-INVENTORY-TRACKING  
 
+- **Live demo (S3 website):**  
+  http://aurumguard-gallery-1763925189.s3-website.us-east-2.amazonaws.com  
 
+- **LinkedIn **  
+www.linkedin.com/in/hawi-jordan-3b18752a9
