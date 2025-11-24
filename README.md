@@ -1,55 +1,69 @@
-# AurumGuard – Serverless Jewelry Inventory Tracking
+# AurumGuard – Serverless Jewelry & High-Value Asset Tracking
 
-AurumGuard is a serverless inventory tracking solution for high-value jewelry assets,
-designed for both companies and individual owners. It reduces losses, improves visibility,
-and makes it easier to prove ownership when working with insurers.
+AurumGuard is a serverless inventory tracking solution for **high-value assets** (jewelry, luxury items, collectibles, etc.), designed for both companies and individual owners. It reduces losses, improves visibility, and makes it easier to prove ownership when working with insurers or auditors.
+
+See `AurumGuard_Inventory_Tracking_Project_Overview.pdf` for a deeper project overview.
+
+---
 
 ## Architecture
 
-- **Amazon S3** – Static website hosting for the jewelry dashboard.  
-- **Amazon API Gateway (REST)** – Front door for the `/items` inventory API.  
-- **AWS Lambda (Python)** – Serverless function to read inventory from DynamoDB.  
-- **Amazon DynamoDB** – NoSQL table storing jewelry items (tenantId, name, category, metal,
-  stone, size, costPrice, retailPrice, isUnique, imageUrl).  
-- **AWS CloudShell + AWS CLI** – Used to deploy and manage the stack.  
-- **AWS IAM** – Roles and policies securing Lambda, API Gateway, and S3 access.
+AurumGuard is built as a fully serverless application on **AWS**. Each service has a specific role:
+
+- **Amazon S3 – Frontend & Static Website Hosting**  
+  Hosts the entire web dashboard (HTML, CSS, JavaScript) using S3 static website hosting.  
+  Users open the S3 website URL in their browser to access the AurumGuard UI.
+
+- **Amazon API Gateway (REST)**  
+  Acts as the **front door** for the backend.  
+  Exposes a REST endpoint like `/items` that the frontend calls with `fetch()` to load inventory data.
+
+- **AWS Lambda (Python)**  
+  Implements the **business logic** in a function such as `AurumGuardItemsFn`.  
+  API Gateway invokes this Lambda, which reads asset records from DynamoDB and returns JSON to the client.
+
+- **Amazon DynamoDB**  
+  Stores the inventory data for high-value assets (for example, rings, earrings, sapphire necklaces).  
+  Each item can include fields such as:
+  `tenantId`, `itemId`, `name`, `category`, `metal`, `stone`, `size`,  
+  `costPrice`, `retailPrice`, `isUnique`, and `imageUrl`.  
+  The `tenantId` design also allows for multi-tenant use (multiple customers or stores).
+
+- **AWS CloudShell + AWS CLI**  
+  Used to **build, deploy, and test** the entire stack from the command line:  
+  uploading `index.html` to S3, configuring API Gateway, deploying the Lambda function, and seeding DynamoDB.
+
+- **AWS IAM**  
+  Provides the **security layer** with roles and policies so that:  
+  - API Gateway is allowed to invoke the Lambda function  
+  - Lambda is allowed to read from DynamoDB  
+  - S3 can safely host the public website without exposing sensitive resources  
+
+### Request Flow
+
+1. The user opens the S3 website URL in their browser.  
+2. The browser downloads `index.html`, CSS, and JavaScript from **Amazon S3**.  
+3. JavaScript on the page calls the **API Gateway** REST endpoint (e.g., `/items`).  
+4. **API Gateway** invokes the **AWS Lambda** function.  
+5. **Lambda** queries **DynamoDB** for the tenant’s inventory items.  
+6. The JSON response is returned to the browser and rendered as product cards with images and pricing.
+
+---
 
 ## Features
 
-- Modern dark-themed jewelry dashboard hosted on S3.  
-- Dynamic product cards loaded from a live AWS REST API.  
-- Supports unique pieces, costs, and retail pricing.  
-- Designed for multi-tenant inventory tracking.
+- Modern, dark-themed dashboard hosted on **Amazon S3**.  
+- Dynamic product cards loaded from a **live AWS REST API**.  
+- Supports unique pieces, internal cost vs. retail price, and asset metadata (category, metal, stone, size, etc.).  
+- Designed for **multi-tenant inventory tracking** with `tenantId` to separate different customers or businesses.  
+
+---
 
 ## Business Value
 
-- **For companies** – Reduce losses, gain real-time visibility, and simplify audits.  
-- **For individuals** – Track expensive jewelry and provide proof of ownership
-  for insurance and claims.
+- **For companies** – Reduce losses and shrinkage, gain real-time visibility into expensive stock, and simplify audits with a clear record of every high-value item.  
+- **For individuals** – Track expensive jewelry and other valuable assets in one place, provide proof of ownership for insurance and claims, and keep photos + details together in a secure, cloud-based system.
 
-See `AurumGuard_Inventory_Tracking_Project_Overview.pdf` for a deeper project overview.
-## Architecture
 
-AurumGuard is built as a fully serverless application on AWS:
 
-- **Amazon S3** – Hosts the static jewelry dashboard (HTML/CSS/JS) using S3 static website hosting.
-- **Amazon API Gateway (REST)** – Exposes the `/items` endpoint that the frontend calls with `fetch`.
-- **AWS Lambda (Python)** – Contains the business logic (`AurumGuardItemsFn`) that reads jewelry items.
-- **Amazon DynamoDB** – Stores jewelry inventory records such as rings, earrings, and sapphire necklaces
-  with fields like `tenantId`, `itemId`, `name`, `category`, `metal`, `stone`, `size`, `costPrice`,
-  `retailPrice`, `isUnique`, and `imageUrl`.
-- **AWS CloudShell + AWS CLI** – Used to deploy and test S3, API Gateway, Lambda, and DynamoDB from the command line.
-- **AWS IAM** – Provides roles and policies so API Gateway can invoke Lambda, Lambda can read DynamoDB, and
-  S3 can safely host the public website.
-
-**Request flow:**
-
-1. The user opens the S3 website URL in their browser.
-2. The browser downloads `index.html`, CSS, and JavaScript from **Amazon S3**.
-3. JavaScript calls the **API Gateway** REST endpoint (`/items`).
-4. **API Gateway** invokes the **AWS Lambda** function.
-5. **Lambda** queries **DynamoDB** for the tenant’s jewelry items.
-6. The JSON response is returned to the browser and rendered as product cards with jewelry images.
-
-### Diagram
 
